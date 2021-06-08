@@ -1,6 +1,7 @@
 import axios, {AxiosError} from 'axios'
 import { parseCookies, setCookie } from 'nookies'
 import { signOut } from '../contexts/AuthContext';
+import { AuthTokenError } from '../errors/AuthTokenError';
 
 let isRefreshing = false; // identifica se está obtendo novo token e refreshToken
 let failedRequestsQueue = [];
@@ -51,7 +52,6 @@ export function setupApiClient(ctx = undefined) {
             if (process.browser) {
               signOut();
             }
-            signOut();
           }).finally(() => {
             isRefreshing = false;
           });
