@@ -19,6 +19,7 @@ api.interceptors.response.use(successResponse => {
     if (error.response.data?.code === 'token.expired') { //código recuperado do backend
       cookies = parseCookies(); // recuperando cookies atualizados
       const { 'nextauth.refreshToken': refreshToken } = cookies;
+      const originalConfig = error.config; // toda a configuração da requisição ao backend (rotas, parametros, etc)
 
       if(!isRefreshing){
         isRefreshing = true;
@@ -40,7 +41,10 @@ api.interceptors.response.use(successResponse => {
       }
       return new Promise((resolve, reject) => {
         failedRequestsQueue.push({
-          onSuccess: () => {},
+          onSuccess: (token: string) => {
+            originalConfig.headers['Authorization'] = `Bearer ${token}`;
+            resolve(api(originalConfig));
+          },
           onFailure: () => {},
         })
       })
