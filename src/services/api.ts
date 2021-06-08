@@ -41,6 +41,9 @@ api.interceptors.response.use(successResponse => {
           // Se conseguir gerar novos token, executar solicitações em fila
           failedRequestsQueue.forEach(request => request.onSuccess(token))
           failedRequestsQueue = [];
+        }).catch(err =>{
+          failedRequestsQueue.forEach(request => request.onFailure(err))
+          failedRequestsQueue = [];
         }).finally(() => {
           isRefreshing = false;
 
