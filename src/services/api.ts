@@ -45,7 +45,9 @@ api.interceptors.response.use(successResponse => {
             originalConfig.headers['Authorization'] = `Bearer ${token}`;
             resolve(api(originalConfig));
           },
-          onFailure: () => {},
+          onFailure: (err: AxiosError) => {
+            reject(err)
+          },
         })
       })
     } else {
