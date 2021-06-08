@@ -38,6 +38,9 @@ api.interceptors.response.use(successResponse => {
           });
           api.defaults.headers['Authorization'] = `Bearer ${token}`;
 
+          // Se conseguir gerar novos token, executar solicitações em fila
+          failedRequestsQueue.forEach(request => request.onSuccess(token))
+          failedRequestsQueue = [];
         }).finally(() => {
           isRefreshing = false;
 
