@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import Router from 'next/router'
+import { setCookie } from 'nookies'
 import { api } from "../services/api";
 
 type User = {
@@ -36,7 +37,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password
       })
-      const { permissions, roles } = response.data;
+      const { token, refreshToken, permissions, roles } = response.data;
+      setCookie(
+        undefined, // contexto de utilização. Se lado browser, deverá ser undefined
+        'nextauth.token', // chave de identificação do cookie
+        token // valor a ser armazenado
+      )
+      setCookie(undefined, 'nextauth.refreshToken', refreshToken);
+
       setUser({
         email,
         permissions,
