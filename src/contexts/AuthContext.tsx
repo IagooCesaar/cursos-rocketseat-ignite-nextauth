@@ -1,5 +1,11 @@
-import { createContext, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../services/api";
+
+type User = {
+  email: string;
+  permissions: string[];
+  roles: string[];
+}
 
 type SigInCredentials = {
   email: string;
@@ -18,7 +24,10 @@ type AuthProviderProps = {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [user, setUser] = useState<User>();
+
   const isAuthenticated = false;
+
   async function signIn({ email, password }: SigInCredentials) {
     try {
       const response = await api.post('/sessions', {
