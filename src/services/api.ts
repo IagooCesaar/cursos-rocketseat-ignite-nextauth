@@ -2,6 +2,7 @@ import axios, {AxiosError} from 'axios'
 import { parseCookies, setCookie } from 'nookies'
 
 let cookies = parseCookies();
+let isRefreshing = false; // identifica se está obtendo novo token e refreshToken
 
 export const api = axios.create({
   baseURL: 'http://localhost:3333',
@@ -18,20 +19,24 @@ api.interceptors.response.use(successResponse => {
       cookies = parseCookies(); // recuperando cookies atualizados
       const { 'nextauth.refreshToken': refreshToken } = cookies;
 
-      api.post('/refresh', {
-        refreshToken,
-      }).then(response => {
-        const { token, refreshToken: newRefreshToken } = response.data;
-        setCookie(undefined, 'nextauth.token', token, {
-          maxAge: 60 * 60 * 24 * 30,
-          path: '/',
-        })
-        setCookie(undefined, 'nextauth.refreshToken', newRefreshToken, {
-          maxAge: 60 * 60 * 24 * 30,
-          path: '/',
+      if(!isRefreshing){
+        isRefreshing = true;
+      
+        api.post('/refresh', {
+          refreshToken,
+        }).then(response => {
+          const { token, refreshToken: newRefreshToken } = response.data;
+          setCookie(undefined, 'nextauth.token', token, {
+            maxAge: 60 * 60 * 24 * 30,
+            path: '/',
+          })
+          setCookie(undefined, 'nextauth.refreshToken', newRefreshToken, {
+            maxAge: 60 * 60 * 24 * 30,
+            path: '/',
+          });
+          api.defaults.headers['Authorization'] = `Bearer ${token}`;
         });
-        api.defaults.headers['Authorization'] = `Bearer ${token}`;
-      });
+      }
     } else {
       // efetuar logoff
     }
