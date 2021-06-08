@@ -1,5 +1,6 @@
 import axios, {AxiosError} from 'axios'
 import { parseCookies, setCookie } from 'nookies'
+import { signOut } from '../contexts/AuthContext';
 
 let cookies = parseCookies();
 let isRefreshing = false; // identifica se está obtendo novo token e refreshToken
@@ -21,7 +22,7 @@ api.interceptors.response.use(successResponse => {
       const { 'nextauth.refreshToken': refreshToken } = cookies;
       const originalConfig = error.config; // toda a configuração da requisição ao backend (rotas, parametros, etc)
 
-      if(!isRefreshing){
+      if(!isRefreshing) {
         isRefreshing = true;
       
         api.post('/refresh', {
@@ -62,7 +63,7 @@ api.interceptors.response.use(successResponse => {
         })
       })
     } else {
-      // efetuar logoff
+      signOut();
     }
   }
   return error
