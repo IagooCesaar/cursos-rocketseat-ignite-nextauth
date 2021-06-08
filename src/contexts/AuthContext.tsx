@@ -34,7 +34,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
         email,
         password
       })
-      console.log(response.data)
+      const { permissions, roles } = response.data;
+      setUser({
+        email,
+        permissions,
+        roles,
+      })
     } catch (err) {
       console.log(err)
     }
