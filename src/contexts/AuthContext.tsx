@@ -15,6 +15,7 @@ type SigInCredentials = {
 
 type AuthContextData = {
   signIn(credentials: SigInCredentials): Promise<void>;
+  user: User;
   isAuthenticated: boolean;
 }
 
@@ -50,7 +51,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   return (
     <AuthContext.Provider value={{
       isAuthenticated,
-      signIn
+      signIn,
+      user
     }}>
       {children}
     </AuthContext.Provider>
