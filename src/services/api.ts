@@ -37,8 +37,14 @@ api.interceptors.response.use(successResponse => {
             path: '/',
           });
           api.defaults.headers['Authorization'] = `Bearer ${token}`;
+
+        }).finally(() => {
+          isRefreshing = false;
+
         });
       }
+
+
       return new Promise((resolve, reject) => {
         failedRequestsQueue.push({
           onSuccess: (token: string) => {
