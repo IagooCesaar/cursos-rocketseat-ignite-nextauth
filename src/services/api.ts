@@ -66,5 +66,5 @@ api.interceptors.response.use(successResponse => {
       signOut();
     }
   }
-  return error
+  return Promise.reject(error); // erros não interceptados serão tratados em suas respectivas chamadas
 })
