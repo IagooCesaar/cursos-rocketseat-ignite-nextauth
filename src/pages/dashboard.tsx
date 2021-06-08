@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { api } from "../services/api";
+import { api } from "../services/apiClient";
 import { withSSRAuth } from "../utils/withSSRAuth";
 
 export default function Dashboard() {
