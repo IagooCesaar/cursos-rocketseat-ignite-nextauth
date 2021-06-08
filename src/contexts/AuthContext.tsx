@@ -28,7 +28,7 @@ type AuthProviderProps = {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
 
-  const isAuthenticated = false;
+  const isAuthenticated = !!user;
 
   async function signIn({ email, password }: SigInCredentials) {
     try {
