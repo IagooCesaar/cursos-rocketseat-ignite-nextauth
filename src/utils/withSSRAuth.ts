@@ -4,7 +4,12 @@ import decode from 'jwt-decode';
 
 import { AuthTokenError } from "../errors/AuthTokenError";
 
-export function withSSRAuth<P>(fn: GetServerSideProps<P>): GetServerSideProps {
+type WithSSRAuthOptions = {
+  permissions?: string[];  
+  roles?: string[];
+}
+
+export function withSSRAuth<P>(fn: GetServerSideProps<P>, options?: WithSSRAuthOptions) {
   // High Order Function - HOR (função que retorna função)
   return async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<P>> => {
     const cookies = parseCookies(context);
