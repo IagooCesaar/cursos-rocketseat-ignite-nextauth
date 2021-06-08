@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, {AxiosError} from 'axios'
 import { parseCookies } from 'nookies'
 
 const cookies = parseCookies();
@@ -8,4 +8,10 @@ export const api = axios.create({
   headers: {
     Authorization: `Bearer ${cookies['nextauth.token']}`
   }
+})
+
+api.interceptors.response.use(successResponse => {
+  return successResponse; // sem modificações
+}, (error: AxiosError) => {
+  return error
 })
