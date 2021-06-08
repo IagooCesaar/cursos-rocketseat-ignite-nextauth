@@ -71,6 +71,8 @@ export function setupApiClient(ctx = undefined) {
       } else {
         if (process.browser) {
           signOut();
+        } else {
+          return Promise.reject(new AuthTokenError())
         }
       }
     }
