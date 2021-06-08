@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useContext } from "react";
 
 type SigInCredentials = {
   email: string;
@@ -29,4 +29,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       {children}
     </AuthContext.Provider>
   )
+}
+
+export function useAuth() {
+  const data = useContext(AuthContext);
+  return data;
 }
