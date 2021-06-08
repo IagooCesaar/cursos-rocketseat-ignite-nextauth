@@ -45,6 +45,10 @@ api.interceptors.response.use(successResponse => {
         }).catch(err =>{
           failedRequestsQueue.forEach(request => request.onFailure(err))
           failedRequestsQueue = [];
+          if (process.browser) {
+            signOut();
+          }
+          signOut();
         }).finally(() => {
           isRefreshing = false;
         });
@@ -63,7 +67,9 @@ api.interceptors.response.use(successResponse => {
         })
       })
     } else {
-      signOut();
+      if (process.browser) {
+        signOut();
+      }
     }
   }
   return Promise.reject(error); // erros não interceptados serão tratados em suas respectivas chamadas
