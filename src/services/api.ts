@@ -3,6 +3,7 @@ import { parseCookies, setCookie } from 'nookies'
 
 let cookies = parseCookies();
 let isRefreshing = false; // identifica se está obtendo novo token e refreshToken
+let failedRequestsQueue = [];
 
 export const api = axios.create({
   baseURL: 'http://localhost:3333',
@@ -37,6 +38,12 @@ api.interceptors.response.use(successResponse => {
           api.defaults.headers['Authorization'] = `Bearer ${token}`;
         });
       }
+      return new Promise((resolve, reject) => {
+        failedRequestsQueue.push({
+          onSuccess: () => {},
+          onFailure: () => {},
+        })
+      })
     } else {
       // efetuar logoff
     }
