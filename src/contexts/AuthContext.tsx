@@ -41,9 +41,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setCookie(
         undefined, // contexto de utilização. Se lado browser, deverá ser undefined
         'nextauth.token', // chave de identificação do cookie
-        token // valor a ser armazenado
+        token, // valor a ser armazenado
+        {
+          maxAge: 60 * 60 * 24 * 30, // 30 days
+          path: '/', // caminhos da aplicação que terão acesso ao cookie, / é global
+        }
       )
-      setCookie(undefined, 'nextauth.refreshToken', refreshToken);
+      setCookie(undefined, 'nextauth.refreshToken', refreshToken, {
+        maxAge: 60 * 60 * 24 * 30,
+        path: '/',
+      });
 
       setUser({
         email,
