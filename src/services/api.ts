@@ -13,5 +13,12 @@ export const api = axios.create({
 api.interceptors.response.use(successResponse => {
   return successResponse; // sem modificações
 }, (error: AxiosError) => {
+  if (error.response.status === 401) { // código de status http
+    if (error.response.data?.code === 'token.expired') { //código recuperado do backend
+      // renovar token
+    } else {
+      // efetuar logoff
+    }
+  }
   return error
 })
