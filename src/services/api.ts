@@ -46,7 +46,6 @@ api.interceptors.response.use(successResponse => {
           failedRequestsQueue = [];
         }).finally(() => {
           isRefreshing = false;
-
         });
       }
 
