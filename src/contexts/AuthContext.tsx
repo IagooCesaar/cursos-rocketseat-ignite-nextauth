@@ -23,6 +23,8 @@ type AuthContextData = {
 
 const AuthContext = createContext({} as AuthContextData);
 
+const authChannel = new BroadcastChannel('auth');
+
 type AuthProviderProps = {
   children: ReactNode;
 }
@@ -30,6 +32,7 @@ type AuthProviderProps = {
 export function signOut() {
   destroyCookie(undefined, 'nextauth.token');
   destroyCookie(undefined, 'nextauth.refreshToken');
+  authChannel.postMessage('signOut')
   Router.push('/');
 }
 
