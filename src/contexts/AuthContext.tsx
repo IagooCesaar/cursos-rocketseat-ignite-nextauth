@@ -23,7 +23,8 @@ type AuthContextData = {
 
 const AuthContext = createContext({} as AuthContextData);
 
-const authChannel = new BroadcastChannel('auth');
+
+let authChannel: BroadcastChannel;
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -40,6 +41,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
 
   const isAuthenticated = !!user;
+
+  useEffect(() => {
+    authChannel = new BroadcastChannel('auth');
+    authChannel.onmessage = (message) => {
+      console.log('authChanel', message);
+      switch (message.data) {
+        case 'signOut':
+          signOut();
+          break;
+        default:
+          break;
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const { 'nextauth.token': token } = parseCookies();
